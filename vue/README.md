@@ -62,4 +62,7 @@ this.$bus.$on(变量,function(){//定义
 <div ckass="topo" ref="topo1"></div>//template中元素
 var w=this.$refs.topo1.offsetWidth//topo1元素
 ```
+12. 静态文件放置
+只是将某一个功能的全部代码移植到这个项目，然后跳转到另一个页面，将代码文件夹放在public中；
+如果是之前一个代码文件是js文件，也是将文件放在public中，然后在template.html中引入；
 
