@@ -66,3 +66,63 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
 只是将某一个功能的全部代码移植到这个项目，然后跳转到另一个页面，将代码文件夹放在public中；
 如果是之前一个代码文件是js文件，也是将文件放在public中，然后在template.html中引入；
 
+13. 本地化vue
+需要引入对应的js和css文件，注意的是fonts里面是图标的文件
+```javascript
+<!DOCTYPE html>
+<html>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<title>城域网流量合格率</title>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/index.css">
+    <script src="./js/vue.js"></script>
+    <link rel="stylesheet" href="./css/element.css">
+    <script src="./js/element.js"></script>
+</head>
+
+<body>
+    <div id="app" class="report">
+        <el-row class="header">
+            <el-col :span="24">
+                <div class="grid-content bg-purple-dark">城域网流量合格率</div>
+            </el-col>
+        </el-row>
+    </div>
+</body>
+
+<script>
+
+    new Vue({
+        el: '#app',
+        components: {
+
+        },
+        data: function () {
+            return {
+                prov: ''
+            }
+        },
+        methods: {
+            handleClick(tab, event) {
+                console.log(tab, event);
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
+            }
+        }
+    })
+</script>
+
+</html>
+
+```
+
