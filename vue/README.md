@@ -126,3 +126,13 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
 
 ```
 
+14. 如果想再element-ui的表格中每个单元格插入自定义的html
+`javascript
+<el-table-column prop="circuitname" label="电路名称">
+    <template slot-scope="scope">
+        <span :title="scope.row.circuitname"
+            v-html="scope.row.circuitname.substring(0,30)"></span>
+    </template>
+</el-table-column>
+`
+
