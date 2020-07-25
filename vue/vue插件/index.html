@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<title>插件</title>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./css/element.css">
+    <link rel="stylesheet" href="./css/element-ui.css">
+    <script src="./js/axios.js"></script>
+    <script src="./js/jquery-1.9.1.min.js"></script>
+    <script src="./js/vue.js"></script>
+    <script src="./js/element.js"></script>
+    <script src="./js/echarts.min.js"></script>
+</head>
+
+<body style="width:1300px;margin:0 auto;">
+    <div id="app" class="report app-container">
+        <el-row class="header">
+            <el-col :span="24" style="height:30px;line-height:30px;margin:10px 0px">
+                <div class="grid-content bg-purple-dark" style="font-size:18px;">插件展示</div>
+            </el-col>
+        </el-row>
+        <el-form class="app-form app-form-shadow checkitemtable" inline label-width="100px">
+            <el-row class="row-1 checkItemselect">
+                <el-col :span="6">
+                    <el-form-item label="发起区域：">
+                        <el-input v-model="Resourcestatus.name"
+                            class="el-date-editor filter-item el-input el-input--mini el-input--prefix el-input--suffix el-date-editor--datetime"
+                            @click.stop.native="Resourcechangetree" placeholder="请选择"
+                            v-clickoutside="ResourcehandleClose"></el-input>
+                        <el-tree :data="alarmarr" show-checkbox node-key="code" ref="tree" highlight-current
+                            :props="ResourcesdefaultProps" :default-checked-keys="Resourcestatuschecked"
+                            @check-change="ResourcegetCheckedNodes" v-show="Resourcegetshowhide">
+                        </el-tree>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="选择时类型：">
+                        <el-select v-model="time.name" placeholder="请选择" @change="changetime(time)"
+                            class="el-date-editor filter-item el-input el-input--mini el-input--prefix el-input--suffix el-date-editor--datetime">
+                            <el-option v-for="item in timedata" :key="item.id" :label="item.name" :value="item.name">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6" style="text-align:right">
+                    <el-form-item label="节点位置" class="el-input--mini">
+                        <el-input v-model="areaname" @click.stop.native="changetree" placeholder="请选择"
+                            v-clickoutside="cehandleClose"></el-input>
+                        <el-tree :data="nodedata" node-key="code" ref="areatree" highlight-current :props="defaultProps"
+                            @current-change="getCheckedNodes" :expand-on-click-node="expandclick" v-show="showhide">
+                        </el-tree>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="时间筛选：" class="el-input--mini">
+                        <el-date-picker v-model="date1" type="datetime" placeholder="开始日期"
+                            style="width:calc(50% - 10px);float:left"
+                            class="el-date-editor filter-item el-input el-input--mini el-input--prefix el-input--suffix el-date-editor--datetime">
+                        </el-date-picker>
+                        <span style="font-size:12px;color:#606266;float:left">至</span>
+                        <el-date-picker v-model="date2" type="datetime" placeholder="结束日期"
+                            style="width:calc(50% - 10px);float:left"
+                            class="el-date-editor filter-item el-input el-input--mini el-input--prefix el-input--suffix el-date-editor--datetime">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="2" style="text-align:right">
+                    <el-form-item label="">
+                        <el-button type="primary" plain @click="getData()"
+                            class="el-button el-button--primary el-button--mini">查询</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+        <el-col :span="24">
+            <div class="grid-content bg-purple-dark">
+                <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
+                    <el-tab-pane label="区域" name="first">
+                        <el-row>
+                            <div class="grid-content bg-purple-dark">
+                                <el-table :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" border
+                                    style="width: 100%;text-align:center" stripe border
+                                    header-cell-class-name="headercell" cell-class-name="cellclazz"
+                                    class="app-table el-table app-table el-table--fit el-table--striped el-table--border el-table--enable-row-hover el-table--enable-row-transition el-table--mini">
+                                    <el-table-column prop="area" label="地区" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="state" label="状态" align="center">
+                                        <template slot-scope="scope">
+                                            <p v-if="scope.row.state=='正常'"
+                                                style="background:rgb(224, 230, 224);cursor:pointer;color:#fff">
+                                                {{scope.row.state}}
+                                            </p>
+                                            <p v-else-if="scope.row.state=='异常'"
+                                                style="background:red;cursor:pointer;color:#fff">{{scope.row.state}}
+                                            </p>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                                    :current-page="currentPage" :page-sizes="[5,15,20]" :page-size="pageSize"
+                                    layout="total, sizes, prev, pager, next, jumper" :total="total"
+                                    class="el-row pagination-container-right" style="float:right">
+                                </el-pagination>
+                            </div>
+                        </el-row>
+
+                    </el-tab-pane>
+                    <el-tab-pane label="数据" name="second">
+
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </el-col>
+
+
+    </div>
+    <script>
+        const clickoutside = {
+            // 初始化指令
+            bind(el, binding, vnode) {
+                function documentHandler(e) {
+                    // 这里判断点击的元素是否是本身，是本身，则返回
+                    if (el.contains(e.target)) {
+                        return false;
+                    }
+                    // 判断指令中是否绑定了函数
+                    if (binding.expression) {
+                        // 如果绑定了函数 则调用那个函数，此处binding.value就是handleClose方法
+                        binding.value(e);
+                    }
+                }
+                // 给当前元素绑定个私有变量，方便在unbind中可以解除事件监听
+                el.__vueClickOutside__ = documentHandler;
+                document.addEventListener('click', documentHandler);
+            },
+            update() { },
+            unbind(el, binding) {
+                // 解除事件监听
+                document.removeEventListener('click', el.__vueClickOutside__);
+                delete el.__vueClickOutside__;
+            },
+        };
+        new Vue({
+            el: '#app',
+            directives: { clickoutside },
+            components: {
+
+            },
+            data: function () {
+                return {
+                    //时间范围
+                    time: { id: 'D', 'name': '近24小时' },
+                    timedata: [
+                        { id: 'D', 'name': '近24小时' },
+                        { id: 'M', 'name': '近1月' },
+                        { id: 'Y', 'name': '近1年' },
+                    ],
+                    date1: new Date(new Date().getTime() - 24 * 60 * 60 * 1000),
+                    date2: new Date(),
+                    echartsdata: [],
+                    //节点
+
+                    activeName: 'first',
+                    nowColor: true,
+                    ResourcesdefaultProps: {
+                        children: 'children',
+                        label: 'name'
+                    },
+                    Resourcegetshowhide: false,
+                    Resourcestatus: { code: "one;two;three;four;five;", name: '区域1,区域2,区域3,区域4,区域5' },
+                    Resourcestatuschecked: [],
+                    alarmarr: [
+                        { code: "one", name: "区域1", status: true },
+                        { code: "two", name: "区域2", status: true },
+                        { code: "three", name: "区域3", status: true },
+                        { code: "four", name: "区域4", status: true },
+                        { code: "five", name: "区域5", status: true },
+                    ],
+                    checkResult: 'one;two;three;four;five;',
+                    checked: true,
+                    checkResultArr: ['one', 'two', 'three', 'four', 'five'],
+
+                    //区域
+                    expandclick: false,
+                    showhide: false,
+                    areanode: 'NOD999',
+                    areaname: '全国',
+                    defaultProps: {
+                        children: 'children',
+                        label: 'text'
+                    },
+                    nodedata: [
+                        {
+                            "text": "全国", "id": "n1",
+                            "children": [
+                                {
+                                    "text": "河北", "id": "n11",
+                                    "children": [{ "text": "石家庄", "id": "n11_1", }],
+                                }]
+                        }],
+                    //表格
+                    tableData: [
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                        { 'area': '北京', 'state': '异常' },
+                    ],
+                    currentPage: 1,
+                    pageSize: 5,
+                    total: 12,
+                    loading: false,
+
+                }
+            },
+            methods: {
+                //区域
+                getCheckedNodes(a, b, c) {
+                    this.areanode = a.id
+                    this.areaname = a.text
+                    this.showhide = false
+                },
+                cehandleClose() {
+                    this.showhide = false
+                },
+                changetree() {
+                    this.showhide = true
+                },
+                //表格
+                handleClick(tab, event) {
+                    console.log(tab, event);
+                },
+                handleSizeChange(val) {
+                    this.pageSize = val
+                    console.log(`每页 ${val} 条`);
+                },
+                handleCurrentChange(val) {
+                    this.currentPage = val
+                    console.log(`当前页: ${val}`);
+                },
+                //下拉多项选择
+                ResourcestatusFunc(name) {
+                },
+                ResourcehandleClose(e) {
+                    this.Resourcegetshowhide = false;
+                },
+                Resourcechangetree() {
+                    this.Resourcegetshowhide = true;
+                },
+                ResourcegetCheckedNodes() {
+                    let nods = this.ResourcegetgetSimpleCheckedNodes(this.$refs.tree.store);
+
+                    let temp = ''
+                    let temp2 = ''
+
+                    for (let i = 0; i < nods.length; i++) {
+                        temp += nods[i].name + ','
+                        temp2 += nods[i].code + ','
+                    }
+                    this.Resourcestatus.name = temp.slice(0, -1)
+                    this.Resourcestatus.code = temp2.slice(0, -1)
+                    this.checkResult = this.Resourcestatus.code
+                    return
+                },
+                ResourcegetgetSimpleCheckedNodes(store) {   //处理选中的节点问题
+                    const checkedNodes = [];
+                    const traverse = function (node) {
+                        const childNodes = node.root ? node.root.childNodes : node.childNodes;
+
+                        childNodes.forEach(child => {
+                            if (child.checked) {
+                                checkedNodes.push(child.data);
+                            }
+                            if (child.indeterminate) {
+                                traverse(child);
+                            }
+                        });
+                    };
+                    traverse(store)
+                    return checkedNodes;
+                },
+            },
+            mounted() {
+
+            },
+            created() {
+
+            }
+
+        })
+    </script>
+</body>
+<style>
+    .app-container .el-tree {
+        z-index: 22;
+        position: absolute;
+        width: 20%;
+        height: 300px;
+        overflow: auto;
+        left: 0px;
+        border: 1px solid #ddd;
+    }
+</style>
+
+</html>
