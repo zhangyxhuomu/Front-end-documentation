@@ -136,7 +136,7 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
 </el-table-column>
 `
 
-## VUE平时
+## 平时
 1. 生命周期
 beforeCreate 在创建之前  
 created	创建出来  
