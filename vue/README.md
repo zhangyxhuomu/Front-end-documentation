@@ -138,30 +138,37 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
 
 ## 平时
 1. 生命周期
-beforeCreate 在创建之前  
-created	创建出来  
-beforeMount	在挂载之前    
-monted	挂载之后  
+beforeCreate    在创建之前  
+created	        创建出来  
+beforeMount	    在挂载之前    
+monted	        挂载之后  
 beforeUpdate	在更新之前  
-updated	更新之后  
-activated	被 keep-alive 缓存的组件激活时调用  
-deactivated	被 keep-alive 缓存的组件停用时调用  
+updated	        更新之后  
+activated	    被 keep-alive 缓存的组件激活时调用  
+deactivated	    被 keep-alive 缓存的组件停用时调用  
 beforeDestory	在销毁之前  
-destroyed	在销毁之后  
+destroyed	    在销毁之后  
 
 2. 常用的命令
-v-model 双向数据绑定  
-v-bind （@） 绑定data的值  
-v-on（@）添加事件  
-v-for  循环数据 注意：当循环的时候给每个循环出来的数据添加key值的时候不要用索引，要用id  
+v-model         双向数据绑定  
+v-bind （@）    绑定data的值  
+v-on（@）       添加事件  
+v-for           循环数据 注意：当循环的时候给每个循环出来的数据添加key值的时候不要用索引，要用id  
 v-if v-else-if  v-else   判断  
-{{}}	声明式渲染  
+{{}}	        声明式渲染 
+ref             可以用这个获取都元素信息 
 
 3. 方法
-methods	放置方法  
+methods	    放置方法  
 components	引入组件  
-directivs	自定义指令  
+directivs	自定义指令
+computed    计算属性  
 
 4. 脚手架流程是
-在终端输入npm start 对应的package.json中scripts中的start对应的命令和文件，之类的配置都是start对应的文件里面；  
+在终端输入npm start 对应的package.json中scripts中的serve对应的命令和文件，之类的配置都是start对应的文件里面；  
+会找到对应的入口文件，main.js App.vue；  
+需要注意的是，项目的基本结构都是在vue.config.js中设置的，这个文件被集合到node_module中，如果我们在package.json同级目录下创建一个vue.config.js中文件，那么这个文件会覆盖默认的，项目也会执行你创建的文件；  
+在vue create的时候回自动创建@vue/cli-service的npm包，  
+服务的启动：@vue/cli-service 安装了一个名为 vue-cli-service 的命令 里面有启动命令的设置，  
+yarn比npm快
 
