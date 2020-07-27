@@ -140,28 +140,28 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
 1. 生命周期
 beforeCreate 在创建之前  
 created	创建出来  
-beforeMount	在挂载之前  
-monted	挂载之后
-beforeUpdate	在更新之前
-updated	更新之后
-activated	被 keep-alive 缓存的组件激活时调用
-deactivated	被 keep-alive 缓存的组件停用时调用
-beforeDestory	在销毁之前
-destroyed	在销毁之后
+beforeMount	在挂载之前    
+monted	挂载之后  
+beforeUpdate	在更新之前  
+updated	更新之后  
+activated	被 keep-alive 缓存的组件激活时调用  
+deactivated	被 keep-alive 缓存的组件停用时调用  
+beforeDestory	在销毁之前  
+destroyed	在销毁之后  
 
 2. 常用的命令
-v-model 双向数据绑定
-v-bind （@） 绑定data的值
-v-on（@）添加事件
-v-for  循环数据 注意：当循环的时候给每个循环出来的数据添加key值的时候不要用索引，要用id
-v-if v-else-if  v-else   判断
-{{}}	声明式渲染
+v-model 双向数据绑定  
+v-bind （@） 绑定data的值  
+v-on（@）添加事件  
+v-for  循环数据 注意：当循环的时候给每个循环出来的数据添加key值的时候不要用索引，要用id  
+v-if v-else-if  v-else   判断  
+{{}}	声明式渲染  
 
-3.方法
-methods	放置方法
-components	引入组件
-directivs	自定义指令
+3. 方法
+methods	放置方法  
+components	引入组件  
+directivs	自定义指令  
 
-4.脚手架流程是
-在终端输入npm start 对应的package.json中scripts中的start对应的命令和文件，之类的配置都是start对应的文件里面；
+4. 脚手架流程是
+在终端输入npm start 对应的package.json中scripts中的start对应的命令和文件，之类的配置都是start对应的文件里面；  
 
