@@ -137,7 +137,7 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
 `
 ## VUE平时
 1. 生命周期
-beforeCreate 在创建之前
+beforeCreate 在创建之前  
 created	创建出来
 beforeMount	在挂载之前
 monted	挂载之后
