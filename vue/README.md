@@ -135,11 +135,12 @@ var w=this.$refs.topo1.offsetWidth//topo1元素
     </template>
 </el-table-column>
 `
+
 ## VUE平时
 1. 生命周期
-beforeCreate 在创建之前
-created	创建出来
-beforeMount	在挂载之前
+beforeCreate 在创建之前  
+created	创建出来  
+beforeMount	在挂载之前  
 monted	挂载之后
 beforeUpdate	在更新之前
 updated	更新之后
